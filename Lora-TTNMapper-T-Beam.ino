@@ -1,32 +1,22 @@
 #include <lmic.h>
 #include <hal/hal.h>
 #include <WiFi.h>
-
-// UPDATE the config.h file in the same folder WITH YOUR TTN KEYS AND ADDR.
 #include "config.h"
 #include "gps.h"
-
-#define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP  30        /* Time ESP32 will go to sleep (in seconds) */
-
+#define uS_TO_S_FACTOR 1000000 
+#define TIME_TO_SLEEP  30        
 RTC_DATA_ATTR int bootCount = 0;
 RTC_DATA_ATTR u4_t RTC_seqnoUp = 0;
-
 RTC_DATA_ATTR double prevLat = 0;
 RTC_DATA_ATTR double prevLon = 0;
 RTC_DATA_ATTR int statCount = 0;
 double dist = 0;
-
-// T-Beam specific hardware
 #define BUILTIN_LED 21
 
 char s[32]; // used to sprintf for Serial output
 uint8_t txBuffer[9];
 gps gps;
 
-// These callbacks are only used in over-the-air activation, so they are
-// left empty here (we cannot leave them out completely unless
-// DISABLE_JOIN is set in config.h, otherwise the linker will complain).
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
@@ -87,9 +77,6 @@ void onEvent (ev_t ev) {
         sprintf(s, "RSSI %d SNR %.1d", LMIC.rssi, LMIC.snr);
         Serial.println(s);
       }
-      // Schedule next transmission
-      // os_setTimedCallback(&sendjob, os_getTime() + sec2osticks(TX_INTERVAL), do_send);
-      // go into deep sleep for TX_interval
       RTC_seqnoUp = LMIC.seqnoUp;
       esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
       esp_deep_sleep_start();
@@ -128,7 +115,7 @@ void do_send(osjob_t* j) {
     if (gps.checkGpsFix())
     {
       dist = TinyGPSPlus::distanceBetween(gps.lat(), gps.lng(), prevLat, prevLon);
-      if (dist > 25 || statCount > 9) { //default is 50 distance
+      if (dist > 25 || statCount > 9) { //default is 50meter distance
         Serial.println("Distance moved: " + String(dist));
         Serial.println("Time stationary: " + String(statCount * TIME_TO_SLEEP * uS_TO_S_FACTOR));
         if (dist <= 50) {
@@ -158,7 +145,6 @@ void do_send(osjob_t* j) {
       os_setTimedCallback(&sendjob, os_getTime() + sec2osticks(3), do_send);
     }
   }
-  // Next TX is scheduled after TX_COMPLETE event.
 }
 
 
@@ -191,7 +177,6 @@ void setup() {
   //Print the wakeup reason for ESP32
   print_wakeup_reason();    
   
-  //Turn off WiFi and Bluetooth
   WiFi.mode(WIFI_OFF);
   btStop();
   gps.init();
@@ -220,7 +205,8 @@ void setup() {
   LMIC.dn2Dr = DR_SF9;
 
   // Set data rate and transmit power for uplink (note: txpow seems to be ignored by the library)
-  LMIC_setDrTxpow(DR_SF7,14); 
+  // Set to SF12 for longer range
+  LMIC_setDrTxpow(DR_SF12,14); 
 
   LMIC.seqnoUp = RTC_seqnoUp;
 
