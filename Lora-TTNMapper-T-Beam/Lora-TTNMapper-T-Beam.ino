@@ -115,6 +115,7 @@ void do_send(osjob_t* j) {
     if (gps.checkGpsFix())
     {
       dist = TinyGPSPlus::distanceBetween(gps.lat(), gps.lng(), prevLat, prevLon);
+      //Als het verschil meer is dan 25 meter en de stationaire counter is hoger dan 9 doe dan een upload
       if (dist > 25 || statCount > 9) { //default is 50meter distance
         Serial.println("Distance moved: " + String(dist));
         Serial.println("Time stationary: " + String(statCount * TIME_TO_SLEEP * uS_TO_S_FACTOR));
