@@ -2,12 +2,10 @@
 #define LORA_TTNMAPPER_TBEAM_CONFIG_INCLUDED
 
 // UPDATE WITH YOUR TTN KEYS AND ADDR.
-static PROGMEM u1_t NWKSKEY[16] = { 0xFD, 0x45, 0x74, 0x95, 0xAA, 0x13, 0x18, 0xDC, 0xAC, 0x05, 0x62, 0x63, 0x12, 0xB6, 0x50, 0xD3 }; // LoRaWAN NwkSKey, network session key 
-static u1_t PROGMEM APPSKEY[16] = { 0x73, 0xAD, 0xF6, 0xA4, 0xF0, 0xB4, 0x20, 0xF8, 0x7F, 0xE8, 0x0F, 0xE6, 0xF8, 0xFC, 0xFC, 0xD9}; // LoRaWAN AppSKey, application session key 
+static PROGMEM u1_t NWKSKEY[16] = {  }; // LoRaWAN NwkSKey, network session key 
+static u1_t PROGMEM APPSKEY[16] = { }; // LoRaWAN AppSKey, application session key 
 static const u4_t DEVADDR = 0x260BC6BE; // LoRaWAN end-device address (DevAddr)
 
 
 
 #endif //LORA_TTNMAPPER_TBEAM_CONFIG_INCLUDED
-FD457495AA1318DCAC05626312B650D3 Network SessionKey
-73ADF6A4F0B420F87FE80FE6F8FCFCD9 ApplicationSessionKey
