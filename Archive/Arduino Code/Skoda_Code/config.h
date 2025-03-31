@@ -4,7 +4,7 @@
 // UPDATE WITH YOUR TTN KEYS AND ADDR.
 static PROGMEM u1_t NWKSKEY[16] = { 0 }; // LoRaWAN NwkSKey, network session key 
 static u1_t PROGMEM APPSKEY[16] = { 0 }; // LoRaWAN AppSKey, application session key 
-static const u4_t DEVADDR = 0x260112FF; // LoRaWAN end-device address (DevAddr)
+static const u4_t DEVADDR = 0x000000; // LoRaWAN end-device address (DevAddr)
 
 
 
