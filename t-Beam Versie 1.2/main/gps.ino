@@ -62,19 +62,22 @@ void gps_setup() {
 static void gps_loop() {
     while (_serial_gps.available()) {
         _gps.encode(_serial_gps.read());
+        //Serial.println(_gps.satellites.value());
+        //Serial.write(_serial_gps.read());
     }
 }
 
 #if defined(PAYLOAD_USE_FULL)
 
     // More data than PAYLOAD_USE_CAYENNE
-    void buildPacket(uint8_t txBuffer[10])
+    void buildPacket(uint8_t txBuffer[11])
     {
         LatitudeBinary = ((_gps.location.lat() + 90) / 180.0) * 16777215;
         LongitudeBinary = ((_gps.location.lng() + 180) / 360.0) * 16777215;
         altitudeGps = _gps.altitude.meters();
         hdopGps = _gps.hdop.value() / 10;
         sats = _gps.satellites.value();
+        uint8_t perc = PMU->getBatteryPercent();
 
         sprintf(t, "Lat: %f", _gps.location.lat());
         Serial.println(t);
@@ -86,6 +89,9 @@ static void gps_loop() {
         Serial.println(t);
         sprintf(t, "Sats: %d", sats);
         Serial.println(t);
+        sprintf(t, "Battery: %d", perc);
+        Serial.println(t);
+
 
         txBuffer[0] = ( LatitudeBinary >> 16 ) & 0xFF;
         txBuffer[1] = ( LatitudeBinary >> 8 ) & 0xFF;
@@ -97,6 +103,7 @@ static void gps_loop() {
         txBuffer[7] = altitudeGps & 0xFF;
         txBuffer[8] = hdopGps & 0xFF;
         txBuffer[9] = sats & 0xFF;
+        txBuffer[10] = perc & 0xFF;
     }
 
 #elif defined(PAYLOAD_USE_CAYENNE)
