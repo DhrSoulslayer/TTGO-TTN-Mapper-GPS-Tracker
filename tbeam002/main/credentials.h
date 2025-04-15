@@ -27,17 +27,17 @@ Credentials file
     // This EUI must be in little-endian format, so least-significant-byte (lsb)
     // first. When copying an EUI from ttnctl output, this means to reverse
     // the bytes. For TTN issued EUIs the last bytes should be 0x00, 0x00,
-    // 0x00.
-    static const u1_t PROGMEM APPEUI[8]  = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    // 0x00. 
+    static const u1_t PROGMEM APPEUI[8]  = { 0x88, 0x0D, 0x01, 0x00, 0x00, 0xAC, 0x59, 0x00 };
 
     // This should also be in little endian format (lsb), see above.
     // Note: You do not need to set this field, if unset it will be generated automatically based on the device macaddr
-    static u1_t DEVEUI[8]  = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    static u1_t DEVEUI[8]  = { 0x02, 0x34, 0x1B, 0x00, 0x00, 0xAC, 0x59, 0x00 };
 
     // This key should be in big endian format (msb) (or, since it is not really a
     // number but a block of memory, endianness does not really apply). In
     // practice, a key taken from ttnctl can be copied as-is.
     // The key shown here is the semtech default key.
-    static const u1_t PROGMEM APPKEY[16] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+    static const u1_t PROGMEM APPKEY[16] = { 0x7B, 0xD0, 0x8E, 0xF0, 0x34, 0xC6, 0xE8, 0x6B, 0x6F, 0x55, 0x9B, 0xF0, 0x51, 0x91, 0x5A, 0x62 };
 
 #endif
